@@ -1,0 +1,14 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Private Node Modules
+node_modules/
+
+# Build folder
+build/
