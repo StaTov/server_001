@@ -1,5 +1,10 @@
 import 'dotenv/config';
 
 const PORT = process.env.PORT || 3001;
+const password = process.env.PASSWORD_DB || '';
 
-export default {PORT};
+const MONGODB_URI = process.env.NODE_ENV === 'test'
+    ? `mongodb+srv://StaTov:${password}@studydb.fm8xxzq.mongodb.net/test/?retryWrites=true&w=majority`
+    : `mongodb+srv://StaTov:${password}@studydb.fm8xxzq.mongodb.net/?retryWrites=true&w=majority`;
+
+export default { PORT, MONGODB_URI };
