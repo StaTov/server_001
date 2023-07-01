@@ -28,7 +28,7 @@ app.use(middleware.requestLogger);
 
 
 app.get('/', (_req, res) => {
-    res.status(200).send('Olya Beautifull');
+    res.status(200).send('success');
 });
 
 app.use(middleware.unknownEndpoint);
