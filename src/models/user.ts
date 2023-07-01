@@ -1,19 +1,7 @@
 
 import { Schema, model } from 'mongoose';
+import { UserSchema } from '../types';
 
-interface UserSchema {
-    username: {
-        type: string,
-        required: boolean,
-        min: Array<number | string>,
-        max: Array<number | string>,
-    },
-    password: {
-        type: string,
-        required: boolean,
-    },
-
-}
 
 const userSchema = new Schema<UserSchema>({
     username: {
@@ -28,5 +16,9 @@ const userSchema = new Schema<UserSchema>({
     }
 });
 
+<<<<<<< HEAD
 
 export default model('User', userSchema);
+=======
+export default model<UserSchema>('User', userSchema);
+>>>>>>> 2758586ca991d8400fc7cc9dd68f8797092f89c5
