@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import middleware from './utils/middleware';
 import logger from './utils/logger';
 import config from './utils/config';
+import userRouter from './routes/users';
 
 
 const app = express();
@@ -26,10 +27,8 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 
+app.use('/user', userRouter);
 
-app.get('/', (_req, res) => {
-    res.status(200).send('Olya Beautifull');
-});
 
 app.use(middleware.unknownEndpoint);
 

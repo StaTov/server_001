@@ -1,8 +1,9 @@
 # server_001
-Node server Express TS. Test - jest.  (REST)
+
+Node server Express TS. Test - jest.  (REST_API)
 
 # 
-npm instal  - load dependens
+npm install  - load dependens
 
 # 
 
