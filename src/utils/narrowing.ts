@@ -29,7 +29,7 @@ export const toNewUser = (obj: unknown): UserNoId => {
 //parseUsername
 const parseUsername = (username: unknown): string => {
     if (!username || !isString(username)) {
-        throw new AppError(400, 'username missing not valid');
+        throw new AppError(400, 'username missing or not valid');
     }
     return username;
 };
