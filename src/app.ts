@@ -24,7 +24,6 @@ mongoose.connect(URI)
         }
     });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../app';
-import User from '../models/User';
+import User from '../models/user';
 
 
 
@@ -24,7 +24,7 @@ describe('TEST USER_API', () => {
         await User.deleteMany({});
         await User.insertMany(initialUsers);
     });
-    describe('method: GET, path: /', () => {
+    describe('method: GET, path: /user', () => {
 
         test('users are returned as json', async () => {
             await api
@@ -39,14 +39,14 @@ describe('TEST USER_API', () => {
         });
 
     });
-    describe('method: GET, path: /:id', () => {
+    describe('method: GET, path: /user/:id', () => {
         test('Wrong id return error', async () => {
             const wrongId = 'wrong';
             await api
                 .get(`/user/${wrongId}`)
                 .expect(404);
         });
-        test.only('Exist user get to valid id succesful', async () => {
+        test('Exist user get to valid id succesful', async () => {
             let users = await User.find({});
             users = [...users].map(u => u.toJSON());
             const existUser = users[0];
@@ -57,9 +57,27 @@ describe('TEST USER_API', () => {
                 .expect('Content-Type', /application\/json/);
 
             expect(response.body).toEqual(existUser);
+        });
+    });
+    describe('method: POST, path: /user', () => {
+        test('missing data return error 400', async () => {
+            const misUsername = {};
+            await api
+                .post('/user')
+                .send(misUsername)
+                .expect(400);
+        });
+        test('valid user created with status 201', async () => {
+            const userObj = { username: 'testName', password: 'testPassword' };
+            await api
+                .post('/user')
+                .send(userObj)
+                .expect(201)
+                .expect('Content-Type', /application\/json/);
 
-            // const foundUser = response.body;
-            // expect(foundUser).toEqual(existUser);
+            const allUsers = await User.find({});
+            expect(allUsers.length).toBe(initialUsers.length + 1);
+            expect(allUsers[2].username).toBe(userObj.username);
         });
     });
     afterAll(async () => {
