@@ -32,6 +32,7 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 };
 
+// create new user
 export const createUser = async (req: Request, res: Response) => {
     try {
         const userObj = toNewUser(req.body);

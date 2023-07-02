@@ -7,7 +7,8 @@ const userSchema = new Schema<UserSchema>({
     username: {
         type: 'String',
         required: true,
-        min: [3, 'username is too short, min 3'],
+        unique: true,
+        min: [2, 'username is too short, min 3'],
         max: [25, 'username is too long, max 25'],
     },
     password: {

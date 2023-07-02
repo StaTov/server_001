@@ -4,8 +4,8 @@ import app from '../app';
 import User from '../models/user';
 
 
-
 const api = supertest(app);
+
 
 const initialUsers = [
     {
@@ -78,6 +78,13 @@ describe('TEST USER_API', () => {
             const allUsers = await User.find({});
             expect(allUsers.length).toBe(initialUsers.length + 1);
             expect(allUsers[2].username).toBe(userObj.username);
+        });
+        test('non-unique username return error 400', async () => {
+            const userObj = { username: initialUsers[0].username, password: 'pwd' };
+            await api
+                .post('/user')
+                .send(userObj)
+                .expect(400);
         });
     });
     afterAll(async () => {
