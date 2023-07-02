@@ -9,9 +9,12 @@ import userRouter from './routes/users';
 
 const app = express();
 
+
 logger.info('connecting to MongoDB');
 
-mongoose.connect(config.MONGODB_URI)
+const URI = config.MONGODB_URI || 'missing url';
+
+mongoose.connect(URI)
     .then(() => {
         logger.info('connected to MongoDB');
     })
@@ -29,13 +32,7 @@ app.use(middleware.requestLogger);
 
 app.use('/user', userRouter);
 
-<<<<<<< HEAD
-app.get('/', (_req, res) => {
-    res.status(200).send('success');
-});
-=======
->>>>>>> 2758586ca991d8400fc7cc9dd68f8797092f89c5
-
+app.use(middleware.errorHeandler);
 app.use(middleware.unknownEndpoint);
 
 export default app;

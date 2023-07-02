@@ -16,9 +16,13 @@ const userSchema = new Schema<UserSchema>({
     }
 });
 
-<<<<<<< HEAD
+userSchema.set('toJSON', {
+    transform: (_document, returnedObject) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
 
-export default model('User', userSchema);
-=======
 export default model<UserSchema>('User', userSchema);
->>>>>>> 2758586ca991d8400fc7cc9dd68f8797092f89c5

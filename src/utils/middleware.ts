@@ -12,4 +12,21 @@ const unknownEndpoint = (_req: Request, res: Response) => {
     res.status(404).send({ error: 'unknown endpoint' });
 };
 
-export default { requestLogger, unknownEndpoint };
+const errorHeandler = (err: Error, _req: Request, res: Response) => {
+    console.error('err.message', err.message);
+    console.error('err.name', err.name);
+    res.send(err.message);
+};
+
+const requireJsonContent = (
+    request: Request,
+    response: Response,
+    next: NextFunction) => {
+    if (request.headers['content-type'] !== 'application/json') {
+        response.status(400).send('Server requires application/json');
+    } else {
+        next();
+    }
+};
+
+export default { requestLogger, unknownEndpoint, errorHeandler, requireJsonContent };
