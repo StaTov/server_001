@@ -5,7 +5,7 @@ import middleware from './utils/middleware';
 import logger from './utils/logger';
 import config from './utils/config';
 import userRouter from './routes/users';
-
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -25,6 +25,7 @@ mongoose.connect(URI)
     });
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(middleware.requestLogger);
 

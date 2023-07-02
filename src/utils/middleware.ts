@@ -1,6 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from './logger';
 
+
+export class AppError extends Error {
+    statusCode: number;
+
+    constructor(statusCode: number, message: string) {
+        super(message);
+
+        Object.setPrototypeOf(this, new.target.prototype);
+        this.name = Error.name;
+        this.statusCode = statusCode;
+        Error.captureStackTrace(this);
+    }
+}
+
 const requestLogger = (req: Request, _res: Response, next: NextFunction): void => {
     logger.info('Method: ', req.method);
     logger.info('Url: ', req.url);
@@ -8,14 +22,29 @@ const requestLogger = (req: Request, _res: Response, next: NextFunction): void =
     logger.info('---');
     next();
 };
+
 const unknownEndpoint = (_req: Request, res: Response) => {
     res.status(404).send({ error: 'unknown endpoint' });
 };
 
-const errorHeandler = (err: Error, _req: Request, res: Response) => {
-    console.error('err.message', err.message);
-    console.error('err.name', err.name);
-    res.send(err.message);
+const errorHeandler = (err: Error, _req: Request, res: Response, next: NextFunction) => {
+
+    logger.error('Error name', err.name);
+
+    if (err.name === 'CastError') {
+        return res.status(400).send({ error: 'malformatted id' });
+    }
+    if (err instanceof AppError) {
+        const status = err.statusCode;
+        res.status(status).json({ error: err.message });
+        return;
+    }
+    if (err instanceof Error) {
+        res.status(400).json({ error: err.message });
+        return;
+    }
+    next(err);
+    return;
 };
 
 const requireJsonContent = (
