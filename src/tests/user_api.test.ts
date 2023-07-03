@@ -2,10 +2,8 @@ import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../app';
 import UserModel from '../models/user';
-import { fetchOneUser, fetchUsers, initialUsers } from './test_helper';
-import { User } from '../types';
 
-
+import { fetchUsers, initialUsers } from './test_helper';
 
 const api = supertest(app);
 
@@ -79,7 +77,7 @@ describe('TEST USER_API', () => {
         });
     });
     describe('method: DELETE, path: /user/id', () => {
-        test.only('success delete with status 200', async () => {
+        test('success delete with status 200', async () => {
             const usersBefor = await fetchUsers();
 
             //add new user
@@ -90,20 +88,21 @@ describe('TEST USER_API', () => {
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
 
-            const userAfterPost = await fetchUsers();
-            const AllUsersAfterPost = await fetchUsers();
-            expect(userAfterPost.length).toBe(usersBefor.length + 1);
+            const usersAfterPost = await fetchUsers();
+
+            expect(usersAfterPost.length).toBe(usersBefor.length + 1);
 
             //delete added user
-            const savedUser = await fetchOneUser({ username: newUser.username });
-            const id = savedUser.id;
+            const id = usersAfterPost[2].id;
+            console.log('userObj: ', usersAfterPost);
+            console.log('ID: ', id);
             await api
-                .delete(`/${id}`)
+                .delete(`/user/${id}`)
                 .expect(200);
 
             const usersAfter = await fetchUsers();
             expect(usersAfter.length).toBe(usersBefor.length);
-            expect(usersAfter.length).toBe(AllUsersAfterPost.length - 1);
+            expect(usersAfter.length).toBe(usersAfterPost.length - 1);
 
         });
     });

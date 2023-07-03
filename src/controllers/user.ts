@@ -4,9 +4,8 @@ import { UserNoId } from '../types';
 import { toNewUser } from '../utils/narrowing';
 
 // get all users
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsers = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('Cookies: ', req.cookies);
         const users = await UserModel.find({});
         res.status(200).json(users);
     } catch (error) {

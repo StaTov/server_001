@@ -14,7 +14,7 @@ router.get('/:id', getUserById as RequestHandler);
 router.post('/', createUser as RequestHandler);
 
 // delete new User
-router.delete('/', deleteUser as RequestHandler);
+router.delete('/:id', deleteUser as RequestHandler);
 
 
 //// export

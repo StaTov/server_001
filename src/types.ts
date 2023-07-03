@@ -1,10 +1,7 @@
 /////////TYPES////////
-
-//////types:
-
+//
 
 // UserSchema
-
 export interface UserSchema {
     username: {
         type: string,
