@@ -13,13 +13,18 @@ export interface UserSchema {
         type: string,
         required: boolean,
     },
+    email: {
+        type: string,
+        required: boolean
+    }
 }
 
-//UserNoId
+// User
 export interface User {
     username: string,
     password: string,
+    email: string,
     id: string
 }
-
+// UserNoId
 export type UserNoId = Omit<User, 'id'>;
