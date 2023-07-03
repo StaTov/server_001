@@ -1,8 +1,6 @@
 import express from 'express';
 import { RequestHandler } from 'express';
-import { createUser, getAllUsers, getUserById } from '../controllers/user';
-
-
+import { createUser, deleteUser, getAllUsers, getUserById } from '../controllers/user';
 
 const router = express.Router();
 
@@ -15,6 +13,9 @@ router.get('/:id', getUserById as RequestHandler);
 // add new User
 router.post('/', createUser as RequestHandler);
 
+// delete new User
+router.delete('/', deleteUser as RequestHandler);
 
-// export
+
+//// export
 export default router;

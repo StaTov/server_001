@@ -19,8 +19,10 @@ export interface UserSchema {
 }
 
 //UserNoId
-
-export interface UserNoId {
+export interface User {
     username: string,
-    password: string
+    password: string,
+    id: string
 }
+
+export type UserNoId = Omit<User, 'id'>;

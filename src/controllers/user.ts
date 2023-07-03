@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import User from '../models/user';
+import UserModel from '../models/user';
 import { UserNoId } from '../types';
 import { toNewUser } from '../utils/narrowing';
 
@@ -7,7 +7,7 @@ import { toNewUser } from '../utils/narrowing';
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         console.log('Cookies: ', req.cookies);
-        const users = await User.find({});
+        const users = await UserModel.find({});
         res.status(200).json(users);
     } catch (error) {
         next(error);
@@ -18,7 +18,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id;
-        const user = await User.findById(id);
+        const user = await UserModel.findById(id);
         if (!user) {
             res.status(404).send('user not found');
             return;
@@ -33,9 +33,20 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userObj = toNewUser(req.body);
-        const newUser = new User<UserNoId>(userObj);
+        const newUser = new UserModel<UserNoId>(userObj);
         const savedUser = await newUser.save();
         res.status(201).json(savedUser);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// delete new user
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.id;
+        await UserModel.findByIdAndDelete(id);
+        res.status(200).end();
     } catch (error) {
         next(error);
     }
