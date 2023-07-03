@@ -4,6 +4,11 @@ import { UserSchema } from '../types';
 
 
 const userSchema = new Schema<UserSchema>({
+    email: {
+        type: 'String',
+        required: true,
+        unique: true,
+    },
     username: {
         type: 'String',
         required: true,
@@ -11,13 +16,19 @@ const userSchema = new Schema<UserSchema>({
         min: [2, 'username is too short, min 3'],
         max: [25, 'username is too long, max 25'],
     },
-    password: {
-        type: 'String',
-        required: true,
+    auth: {
+        password: {
+            type: 'String',
+            required: true,
+        },
+        sessionToken: {
+            type: 'String',
+            required: true
+        }
     },
-    email: {
-        type: 'String',
-        required: true,
+    role: {
+        type: [String],
+        require: true,
     }
 });
 

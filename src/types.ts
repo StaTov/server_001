@@ -3,19 +3,31 @@
 
 // UserSchema
 export interface UserSchema {
+    email: {
+        type: string,
+        required: boolean,
+        unique: true, 
+    }
     username: {
         type: string,
         required: boolean,
         min: Array<number | string>,
         max: Array<number | string>,
     },
-    password: {
-        type: string,
-        required: boolean,
+    auth: {
+        password: {
+            type: string,
+            required: boolean,
+            select: boolean,
+        },
+        sessionToken: {
+            type: string | '',
+            required: boolean,
+        },
     },
-    email: {
-        type: string,
-        required: boolean
+    role: {
+        type: string[] | [],
+        required: boolean,
     }
 }
 
