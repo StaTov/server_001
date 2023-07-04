@@ -5,6 +5,7 @@ import middleware from './utils/middleware';
 import logger from './utils/logger';
 import config from './utils/config';
 import userRouter from './routes/users';
+import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -27,10 +28,13 @@ mongoose.connect(URI)
 app.use(cors({credentials: true}));
 app.use(cookieParser());
 app.use(express.json());
+
 app.use(middleware.requestLogger);
 
 
 app.use('/user', userRouter);
+app.use('/auth', authRouter);
+
 
 app.use(middleware.errorHeandler);
 app.use(middleware.unknownEndpoint);

@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import UserModel from '../models/user';
-import { UserNoId } from '../types';
-import { toNewUser } from '../utils/narrowing';
 
 // get all users
 export const getAllUsers = async (_req: Request, res: Response, next: NextFunction) => {
@@ -23,18 +21,6 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
             return;
         }
         res.status(200).json(user);
-    } catch (error) {
-        next(error);
-    }
-};
-
-// create new user
-export const createUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const userObj = toNewUser(req.body);
-        const newUser = new UserModel<UserNoId>(userObj);
-        const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
     } catch (error) {
         next(error);
     }

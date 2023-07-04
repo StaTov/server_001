@@ -1,6 +1,6 @@
 
 import { Schema, model } from 'mongoose';
-import { UserSchema } from '../types';
+import {  UserSchema } from '../types';
 
 
 const userSchema = new Schema<UserSchema>({
@@ -20,11 +20,12 @@ const userSchema = new Schema<UserSchema>({
         password: {
             type: 'String',
             required: true,
+            select: false,
         },
         sessionToken: {
             type: 'String',
-            required: true
-        }
+            select: false,
+        },
     },
     role: {
         type: [String],
@@ -38,6 +39,7 @@ userSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString();
         delete returnedObject._id;
         delete returnedObject.__v;
+        delete returnedObject.auth;
     }
 });
 

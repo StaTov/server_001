@@ -5,12 +5,20 @@ import { User } from '../types';
 // initial users
 export const initialUsers = [
     {
+        email: 'one@test.com',
         username: 'Stainslav',
-        password: 'one'
+        auth: {
+            password: 'one',
+        },
+        role: ['guest']
     },
     {
+        email: 'two@test.com',
         username: 'Olya',
-        password: 'two'
+        auth: {
+            password: 'two',
+        },
+        role: ['guest']
     }
 ];
 

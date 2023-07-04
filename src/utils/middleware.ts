@@ -43,10 +43,10 @@ const errorHeandler = (err: Error, _req: Request, res: Response, next: NextFunct
     logger.error('Error name', err.name);
 
     if (err.name === 'MongoServerError') {
-        return res.status(400).send({ error: 'username must be unique' });
+        return res.status(400).json({ error: err.message });
     }
     if (err.name === 'CastError') {
-        return res.status(404).send({ error: 'malformatted id' });
+        return res.status(404).json({ error: err.message });
     }
     if (err instanceof AppError) {
         const status = err.statusCode;

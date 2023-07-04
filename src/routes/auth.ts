@@ -1,7 +1,11 @@
 import express from 'express';
 import { RequestHandler } from 'express';
-import { createUser, deleteUser, getAllUsers, getUserById } from '../controllers/user';
+import { regUser } from '../controllers/auth';
+
 
 const router = express.Router();
 
-router.post('/')
+//router.post('/login', () => { });
+router.post('/reg', regUser as RequestHandler);
+
+export default router;

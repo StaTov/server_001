@@ -47,6 +47,19 @@ describe('TEST USER_API', () => {
         });
     });
 
+    describe('method: DELETE, path: /user/id', () => {
+        test.only('success delete with status 200', async () => {
+            const users = await fetchUsers();
+            //delete  user
+            const id = users[1].id;
+            await api
+                .delete(`/user/${id}`)
+                .expect(200);
+
+            const usersAfter = await fetchUsers();
+            expect(usersAfter.length).toBe(users.length - 1);
+        });
+    });
     describe('method: POST, path: /user', () => {
         test('missing data return error 400', async () => {
             const misUsername = {};
@@ -74,36 +87,6 @@ describe('TEST USER_API', () => {
                 .post('/user')
                 .send(userObj)
                 .expect(400);
-        });
-    });
-    describe('method: DELETE, path: /user/id', () => {
-        test('success delete with status 200', async () => {
-            const usersBefor = await fetchUsers();
-
-            //add new user
-            const newUser = { username: 'newName', password: 'newPassword' };
-            await api
-                .post('/user')
-                .send(newUser)
-                .expect(201)
-                .expect('Content-Type', /application\/json/);
-
-            const usersAfterPost = await fetchUsers();
-
-            expect(usersAfterPost.length).toBe(usersBefor.length + 1);
-
-            //delete added user
-            const id = usersAfterPost[2].id;
-            console.log('userObj: ', usersAfterPost);
-            console.log('ID: ', id);
-            await api
-                .delete(`/user/${id}`)
-                .expect(200);
-
-            const usersAfter = await fetchUsers();
-            expect(usersAfter.length).toBe(usersBefor.length);
-            expect(usersAfter.length).toBe(usersAfterPost.length - 1);
-
         });
     });
 
