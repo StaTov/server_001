@@ -38,16 +38,29 @@ export const regUser = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
-export const login = async (req: Request, _res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = checkLoginData(req.body);
-        const existUser = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email }).select('+auth.password');
 
-        if (!existUser) {
+        if (!user) {
             throw new AppError(400, 'this email is not registered ');
         }
-        bcrypt.compareSync(password, existUser.auth.password);
 
+        const existPassword = bcrypt.compareSync(password, user.auth.password);
+
+        if (!existPassword) {
+            throw new AppError(400, 'wrong password');
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const token = bcrypt.hashSync(user.username, salt);
+        
+        user.auth.sessionToken = token;
+        await user.save();
+
+        res.cookie('STATOV-AUTH', token);
+        res.status(200).json(user).end();
+        
     } catch (e) {
         next(e);
     }

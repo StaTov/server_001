@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from './logger';
+import UserModel from '../models/user';
+import { merge } from 'lodash';
 
 
 export class AppError extends Error {
@@ -35,6 +37,21 @@ const requireJsonContent = (
     } else {
         next();
     }
+};
+
+//isAuthenticated
+export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
+    const sessionToken = req.cookies['STATOV-AUTH'] as string;
+    if (!sessionToken) {
+        return res.sendStatus(403);
+    }
+    const existUser = await UserModel.findOne({ 'auth.sessionToken': sessionToken });
+    if (!existUser) {
+        return res.sendStatus(403);
+    }
+    merge(req, { identity: existUser });
+
+    return next();
 };
 
 // error heandler
