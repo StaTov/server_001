@@ -22,6 +22,9 @@ export const initialUsers = [
     }
 ];
 
+//user object to register new user
+export const userObj = { username: 'testName', password: 'testPassword', email: 'test@email.com' };
+
 // fetch all users
 export const fetchUsers = async (): Promise<Array<User>> => {
     const users = await UserModel.find({});
