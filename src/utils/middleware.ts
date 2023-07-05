@@ -3,7 +3,6 @@ import logger from './logger';
 import UserModel from '../models/user';
 import { merge } from 'lodash';
 
-
 export class AppError extends Error {
     statusCode: number;
 
@@ -74,11 +73,10 @@ const errorHeandler = (err: Error, _req: Request, res: Response, next: NextFunct
         res.status(400).json({ error: err.message });
         return;
     }
-    next(err);
-    return;
+    return next(err);
 };
 
-// handler unknow point
+// handler unknown point
 const unknownEndpoint = (_req: Request, res: Response) => {
     res.status(404).send({ error: 'unknown endpoint' });
 };

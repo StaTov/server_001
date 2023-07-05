@@ -48,7 +48,7 @@ describe('TEST USER_API', () => {
     });
 
     describe('method: DELETE, path: /user/id', () => {
-        test.only('success delete with status 200', async () => {
+        test('success delete with status 200', async () => {
             const users = await fetchUsers();
             //delete  user
             const id = users[1].id;
@@ -60,18 +60,18 @@ describe('TEST USER_API', () => {
             expect(usersAfter.length).toBe(users.length - 1);
         });
     });
-    describe('method: POST, path: /user', () => {
+    describe('method: POST, path: /auth/reg', () => {
         test('missing data return error 400', async () => {
-            const misUsername = {};
+            const missUsername = {};
             await api
-                .post('/user')
-                .send(misUsername)
+                .post('/auth/reg')
+                .send(missUsername)
                 .expect(400);
         });
         test('valid user created with status 201', async () => {
-            const userObj = { username: 'testName', password: 'testPassword' };
+            const userObj = { username: 'testName', password: 'testPassword', email: 'test@email.com' };
             await api
-                .post('/user')
+                .post('/auth/reg')
                 .send(userObj)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -82,9 +82,9 @@ describe('TEST USER_API', () => {
             expect(allUsers[2].username).toBe(userObj.username);
         });
         test('non-unique username return error 400', async () => {
-            const userObj = { username: initialUsers[0].username, password: 'pwd' };
+            const userObj = { username: initialUsers[0].username, password: 'pwd', email: 'test@email.com' };
             await api
-                .post('/user')
+                .post('/auth/reg')
                 .send(userObj)
                 .expect(400);
         });

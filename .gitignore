@@ -12,3 +12,7 @@ node_modules/
 
 # Build folder
 build/
+
+#Diagram
+.drawio
+.test.drawio
