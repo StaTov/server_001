@@ -1,6 +1,6 @@
 
 import { Schema, model } from 'mongoose';
-import {  UserSchema } from '../types';
+import { UserSchema } from '../types';
 
 
 const userSchema = new Schema<UserSchema>({
@@ -33,6 +33,7 @@ const userSchema = new Schema<UserSchema>({
     }
 });
 
+//User schema transform to JSON
 userSchema.set('toJSON', {
     transform: (_document, returnedObject) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
@@ -43,4 +44,28 @@ userSchema.set('toJSON', {
     }
 });
 
-export default model<UserSchema>('User', userSchema);
+const UserModel = model<UserSchema>('User', userSchema);
+
+//methods
+
+export const getUserByUsername = (username: string) => UserModel.findOne({username});
+export const findByToken = (token: string) => UserModel.findOne({ 'auth.sessionToken': token });
+export const deleteUserById = (id: string) => UserModel.findByIdAndDelete(id);
+export const getUserById = (id: string) => UserModel.findById(id);
+export const getUsers = () => UserModel.find({});
+export const getUserByEmail = (email: string) => UserModel.findOne({ email });
+export const insertMany = (obj: object) => UserModel.insertMany(obj);
+export const deleteMany = () => UserModel.deleteMany({});
+export const createUser = (email: string, passwordHash: string, username: string) => {
+    return new UserModel({
+        email,
+        username,
+        auth: {
+            password: passwordHash,
+        },
+        role: ['guest']
+    });
+};
+
+
+

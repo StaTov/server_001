@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../app';
-import UserModel from '../models/user';
+import  { deleteMany, getUserByEmail, getUsers, insertMany } from '../models/user';
 
-import { fetchUsers, initialUsers, userObj } from './test_helper';
+import { initialUsers, userObj } from './test_helper';
+
+
+
 
 const api = supertest(app);
 
@@ -12,8 +15,8 @@ describe('TEST USER_API', () => {
     describe('USER Route', () => {
 
         beforeEach(async () => {
-            await UserModel.deleteMany({});
-            await UserModel.insertMany(initialUsers);
+            await deleteMany();
+            await insertMany(initialUsers);
         });
         describe('method: GET, path: /user', () => {
 
@@ -37,32 +40,32 @@ describe('TEST USER_API', () => {
                     .expect(404);
             });
             test('Exist user get to valid id succesful', async () => {
-                let users = await UserModel.find({});
-                users = [...users].map(u => u.toJSON());
-                const existUser = users[0];
 
+                const existUser = await getUserByEmail(initialUsers[0].email);
+                
+                const id = existUser?._id.toString();
                 const response = await api
-                    .get(`/user/${existUser.id}`)
+                    .get(`/user/${id}`)
                     .expect(200)
                     .expect('Content-Type', /application\/json/);
-
-                expect(response.body).toEqual(existUser);
+                
+                expect(response.body).toEqual(existUser?.toJSON());
             });
         });
 
         describe('method: DELETE, path: /user/id', () => {
             test('success delete with status 200', async () => {
 
-                const users = await fetchUsers();
+                const users = await getUsers();
 
                 //delete  user
 
-                const id = users[0].id;
+                const id = users[0]._id?.toString();
                 await api
                     .delete(`/user/${id}`)
                     .expect(200);
 
-                const usersAfter = await fetchUsers();
+                const usersAfter = await getUsers();
                 expect(usersAfter.length).toBe(users.length - 1);
             });
         });
@@ -71,8 +74,8 @@ describe('TEST USER_API', () => {
     describe('AUTH Route', () => {
 
         beforeEach(async () => {
-            await UserModel.deleteMany({});
-            await UserModel.insertMany(initialUsers);
+            await deleteMany();
+            await insertMany(initialUsers);
         });
         describe('method: POST, path: /auth/reg', () => {
             test('missing data return error 400', async () => {
@@ -90,7 +93,7 @@ describe('TEST USER_API', () => {
                     .expect(201)
                     .expect('Content-Type', /application\/json/);
 
-                const allUsers = await fetchUsers();
+                const allUsers = await getUsers();
 
                 expect(allUsers.length).toBe(initialUsers.length + 1);
                 expect(allUsers[2].username).toBe(userObj.username);
@@ -102,7 +105,7 @@ describe('TEST USER_API', () => {
                     .send(noUniqueUsernameUser)
                     .expect(400);
             });
-            test('saved user return with no password', async () => {
+            test('saved user return with no password field', async () => {
                 const response = await api
                     .post('/auth/reg')
                     .send(userObj)

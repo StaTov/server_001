@@ -7,6 +7,7 @@ import config from './utils/config';
 import userRouter from './routes/users';
 import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 
 const app = express();
 
@@ -25,7 +26,8 @@ mongoose.connect(URI)
         }
     });
 
-app.use(cors({credentials: true}));
+app.use(cors({ credentials: true }));
+app.use(compression());
 app.use(cookieParser());
 app.use(express.json());
 

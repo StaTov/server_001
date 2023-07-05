@@ -1,35 +1,6 @@
 /////////TYPES////////
 //
 
-// UserSchema
-// export interface UserSchema {
-//     email: {
-//         type: string,
-//         required: boolean,
-//         unique: true,
-//     }
-//     username: {
-//         type: string,
-//         required: boolean,
-//         min: Array<number | string>,
-//         max: Array<number | string>,
-//     },
-//     auth: {
-//         password: {
-//             type: string,
-//             required: boolean,
-//             select: boolean,
-//         },
-//         sessionToken?: {
-//             type: string,
-//         },
-//     },
-//     role: {
-//         type: string[] | [],
-//         required: boolean,
-//     }
-// }
-
 export interface UserSchema {
     email: string,
     username: string,
